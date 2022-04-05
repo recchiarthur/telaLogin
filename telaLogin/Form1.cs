@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Security.Cryptography;
+using System.Globalization;
 
 namespace telaLogin
 {
@@ -15,6 +18,13 @@ namespace telaLogin
         public telaLogin()
         {
             InitializeComponent();
+            if (File.Exists("senhasalva.txt"))
+            {
+                var lines = File.ReadAllLines("senhasalva.txt");
+                tbUsuario.Text = lines[0];
+                tbSenha.Text = lines[1];
+                cbSalvarSenha.Checked = true;
+            }
         }
 
         private void cbMostrarSenha_CheckedChanged(object sender, EventArgs e)
@@ -35,14 +45,33 @@ namespace telaLogin
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
-            Access access = new Access();
-            var user = access.Login(tbUsuario.Text, tbSenha.Text);
+            string senhaencriptada = "";
+            using (HashAlgorithm alg = SHA1.Create())
+            {
+                var encoding = new UnicodeEncoding();
+                byte[] bytes = alg.ComputeHash(encoding.GetBytes(tbSenha.Text));
+                StringBuilder sb = new StringBuilder();
+                foreach (var b in bytes)
+                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0:X2}", b);
+                senhaencriptada = sb.ToString();
+            }
 
-            if(user != null)
+            telaLogin2Entities entities = new telaLogin2Entities();
+            var user = entities.Usuario.FirstOrDefault(u => u.nome == tbUsuario.Text && u.senha == senhaencriptada);
+
+            if (user != null)
             {
                 MessageBox.Show("Bem-vindo!", $"Bem-vindo {user.nome}!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //Abra a próxima tela aqui
                 this.Hide();
+                if(cbSalvarSenha.Checked)
+                {
+                    File.WriteAllText("senhasalva.txt", $"{user.nome}\n{tbSenha.Text}");
+                }
+                else
+                {
+                    File.Delete("senhasalva.txt");
+                }
             }
             else
             {

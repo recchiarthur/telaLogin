@@ -22,7 +22,7 @@ namespace telaLogin
             _connection.Open();
         }
 
-        public Usuario Login(string nome, string senha)
+       /* public Usuario Login(string nome, string senha)
         {
             SqlCommand command = new SqlCommand();
             command.Connection = _connection;
@@ -57,6 +57,6 @@ namespace telaLogin
             usuariologado.senha = dt.Rows[0]["senha"].ToString();
 
             return usuariologado;
-        }
+        }*/
     }
 }
