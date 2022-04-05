@@ -61,7 +61,7 @@ namespace telaLogin
 
             if (user != null)
             {
-                MessageBox.Show("Bem-vindo!", $"Bem-vindo {user.nome}!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Bem-vindo {user.nome}!", "Bem-vindo!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 //Abra a próxima tela aqui
                 this.Hide();
                 if(cbSalvarSenha.Checked)
@@ -75,7 +75,7 @@ namespace telaLogin
             }
             else
             {
-                MessageBox.Show("Erro!", "Senha ou Usuario incorreto", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Senha ou usuario incorreto!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
