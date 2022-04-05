@@ -40,7 +40,23 @@ namespace telaLogin
                 senhaencriptada = sb.ToString();
             }
 
-            return null;
+            string query = $"select * from Usuario where nome = '{nome}' and senha = '{senhaencriptada}'";
+            command.CommandText = query;
+
+            DataTable dt = new DataTable();
+            dt.Load(command.ExecuteReader());
+
+            if(dt.Rows.Count == 0)
+                return null;
+
+            var dados = dt.Rows[0].ItemArray;
+
+            Usuario usuariologado = new Usuario();
+            usuariologado.ID = (int)dt.Rows[0]["ID"];
+            usuariologado.nome = dt.Rows[0]["nome"].ToString();
+            usuariologado.senha = dt.Rows[0]["senha"].ToString();
+
+            return usuariologado;
         }
     }
 }

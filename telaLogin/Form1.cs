@@ -14,8 +14,6 @@ namespace telaLogin
     {
         public telaLogin()
         {
-            Access access = new Access();
-            access.Login("Carlos", "123");
             InitializeComponent();
         }
 
@@ -37,7 +35,19 @@ namespace telaLogin
 
         private void buttonLogin_Click(object sender, EventArgs e)
         {
+            Access access = new Access();
+            var user = access.Login(tbUsuario.Text, tbSenha.Text);
 
+            if(user != null)
+            {
+                MessageBox.Show("Bem-vindo!", $"Bem-vindo {user.nome}!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //Abra a próxima tela aqui
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Erro!", "Senha ou Usuario incorreto", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void tbUsuario_TextChanged(object sender, EventArgs e)
