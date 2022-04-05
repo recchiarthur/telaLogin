@@ -14,6 +14,8 @@ namespace telaLogin
     {
         public telaLogin()
         {
+            Access access = new Access();
+            access.Login("Carlos", "123");
             InitializeComponent();
         }
 
